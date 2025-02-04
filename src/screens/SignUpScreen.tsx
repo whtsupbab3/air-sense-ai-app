@@ -25,25 +25,26 @@ export default function SignUpScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/logo.png')}
+          source={require("../assets/logo.png")}
           style={styles.logo}
           resizeMode="contain"
         />
       </View>
-      
+
       <Text style={styles.title}>Create Account</Text>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email</Text>
         <TextInput
-          style={styles.input}
-          placeholder="hello@company.com"
+          style={globalStyles.input}
+          placeholder="user@gmail.com"
           placeholderTextColor="#666"
           value={email}
           onChangeText={setEmail}
@@ -56,7 +57,7 @@ export default function SignUpScreen() {
         <Text style={styles.label}>Password</Text>
         <View style={styles.passwordContainer}>
           <TextInput
-            style={[styles.input, styles.passwordInput]}
+            style={[globalStyles.input, styles.passwordInput]}
             placeholder="Your password"
             placeholderTextColor="#666"
             value={password}
@@ -80,7 +81,7 @@ export default function SignUpScreen() {
         <Text style={styles.label}>Confirm Password</Text>
         <View style={styles.passwordContainer}>
           <TextInput
-            style={[styles.input, styles.passwordInput]}
+            style={[globalStyles.input, styles.passwordInput]}
             placeholder="Confirm your password"
             placeholderTextColor="#666"
             value={confirmPassword}
@@ -100,13 +101,19 @@ export default function SignUpScreen() {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.signUpButton}>
+      <TouchableOpacity
+        disabled={!password.trim() || !email.trim() || !confirmPassword.trim()}
+        style={[
+          styles.signUpButton,
+          (!password.trim() || !email.trim() || !confirmPassword.trim()) && globalStyles.buttonDisabled,
+        ]}
+      >
         <Text style={styles.signUpButtonText}>Create Account</Text>
       </TouchableOpacity>
 
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>Already have an account?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
           <Text style={styles.loginButton}>Log in</Text>
         </TouchableOpacity>
       </View>
@@ -119,7 +126,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 10,
   },
   logo: {
@@ -139,13 +146,6 @@ const styles = StyleSheet.create({
   label: {
     color: "#FFFFFF",
     marginBottom: 8,
-    fontSize: 16,
-  },
-  input: {
-    backgroundColor: "#1A1A1A",
-    borderRadius: 8,
-    padding: 16,
-    color: "#FFFFFF",
     fontSize: 16,
   },
   passwordContainer: {
@@ -173,9 +173,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   loginContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 20,
   },
   loginText: {

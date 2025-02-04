@@ -79,6 +79,7 @@ export default function App() {
                 title: "Sign In",
                 animationTypeForReplace: state.isSignout ? "pop" : "push",
                 headerShown: false,
+                gestureEnabled: false,
               }}
             />
             <Stack.Screen
@@ -87,6 +88,7 @@ export default function App() {
               options={{
                 title: "Sign Up",
                 headerShown: false,
+                gestureEnabled: false,
               }}
             />
             <Stack.Screen
@@ -95,6 +97,7 @@ export default function App() {
               options={{
                 title: "Forgot Password",
                 headerShown: false,
+                gestureEnabled: false,
               }}
             />
           </>

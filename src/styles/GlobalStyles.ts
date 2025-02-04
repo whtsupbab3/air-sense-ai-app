@@ -13,6 +13,16 @@ const globalStyles = StyleSheet.create({
     backgroundColor: "#000",
     color: "white",
   },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  input: {
+    backgroundColor: "#1A1A1A",
+    color: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+  },
 });
 
 export default globalStyles;

@@ -25,25 +25,33 @@ export default function SignInScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigation = useNavigation<NavigationProp>();
+
+  const handleLogin = () => {
+    if (!email.trim() || !password.trim()) return;
+
+    alert("Password reset instructions have been sent to your email");
+    navigation.navigate("SignIn");
+  };
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/logo.png')}
+          source={require("../assets/logo.png")}
           style={styles.logo}
           resizeMode="contain"
         />
       </View>
-      
+
       <Text style={styles.title}>Log in</Text>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email</Text>
         <TextInput
-          style={styles.input}
-          placeholder="hello@company.com"
+          style={globalStyles.input}
+          placeholder="user@gmail.com"
           placeholderTextColor="#666"
           value={email}
           onChangeText={setEmail}
@@ -56,7 +64,7 @@ export default function SignInScreen() {
         <Text style={styles.label}>Password</Text>
         <View style={styles.passwordContainer}>
           <TextInput
-            style={[styles.input, styles.passwordInput]}
+            style={[globalStyles.input, styles.passwordInput]}
             placeholder="Your password"
             placeholderTextColor="#666"
             value={password}
@@ -76,17 +84,26 @@ export default function SignInScreen() {
         </View>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-        <Text style={[globalStyles.text, styles.forgotPassword]}>Forgot Password?</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+        <Text style={[globalStyles.text, styles.forgotPassword]}>
+          Forgot Password?
+        </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity
+        disabled={!password.trim() || !email.trim()}
+        style={[
+          styles.loginButton,
+          (!password.trim() || !email.trim()) && globalStyles.buttonDisabled,
+        ]}
+        onPress={handleLogin}
+      >
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don't have an account?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
           <Text style={styles.registerButton}>Register</Text>
         </TouchableOpacity>
       </View>
@@ -99,7 +116,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 10,
   },
   logo: {
@@ -119,13 +136,6 @@ const styles = StyleSheet.create({
   label: {
     color: "#FFFFFF",
     marginBottom: 8,
-    fontSize: 16,
-  },
-  input: {
-    backgroundColor: "#1A1A1A",
-    borderRadius: 8,
-    padding: 16,
-    color: "#FFFFFF",
     fontSize: 16,
   },
   passwordContainer: {
@@ -157,9 +167,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   registerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 20,
   },
   registerText: {

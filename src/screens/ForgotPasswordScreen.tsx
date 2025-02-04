@@ -69,9 +69,8 @@ export default function ForgotPasswordScreen() {
       </Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email<Text style={styles.required}>*</Text></Text>
         <TextInput
-          style={[styles.input, emailError ? styles.inputError : null]}
+          style={[globalStyles.input, emailError ? styles.inputError : null]}
           placeholder="user@gmail.com"
           placeholderTextColor="#666"
           value={email}
@@ -84,7 +83,7 @@ export default function ForgotPasswordScreen() {
       </View>
 
       <TouchableOpacity
-        style={[styles.resetButton, (emailError || !email.trim()) && styles.resetButtonDisabled]}
+        style={[styles.resetButton, (emailError || !email.trim()) && globalStyles.buttonDisabled]}
         onPress={handleResetPassword}
         disabled={!!emailError || !email.trim()}
       >
@@ -122,6 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     color: "#FFFFFF",
+    marginBottom: 8,
   },
   inputContainer: {
     marginBottom: 20,
@@ -130,14 +130,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     color: "#000",
-  },
-  input: {
-    color: "#666",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
   },
   resetButton: {
     backgroundColor: "#FFF",
@@ -170,8 +162,5 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: "#FF0000",
-  },
-  resetButtonDisabled: {
-    opacity: 0.5,
   },
 });
