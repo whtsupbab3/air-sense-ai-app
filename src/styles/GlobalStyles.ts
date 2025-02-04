@@ -6,7 +6,7 @@ const globalStyles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
   },
   screen: {
     flex: 1,

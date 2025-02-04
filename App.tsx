@@ -2,14 +2,19 @@ import React, { useReducer, useEffect, useMemo } from "react";
 import * as SecureStore from "expo-secure-store";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from 'react-native';
-import HomeScreen from './screens/HomeScreen';
-import SplashScreen from './screens/SplashScreen';
-import SignInScreen from "./screens/SignInScreen";
-import { authReducer, initialState } from "./state/authReducer";
+
+
+import HomeScreen from "./src/screens/HomeScreen";
+import SignInScreen from "./src/screens/SignInScreen";
+import SplashScreen from "./src/screens/SplashScreen";
+import SignUpScreen from "./src/screens/SignUpScreen"; 
+import { authReducer, initialState } from "./src/state/authReducer";
+import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
 
 type RootStackParamList = {
   SignIn: undefined;
+  SignUp: undefined;
+  ForgotPassword: undefined;
   Home: undefined;
   Splash: undefined;
 };
@@ -58,7 +63,6 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#000000" barStyle="light-content" translucent />
       <Stack.Navigator>
         {state.isLoading ? (
           <Stack.Screen
@@ -67,15 +71,33 @@ export default function App() {
             options={{ headerShown: false }}
           />
         ) : state.userToken == null ? (
-          <Stack.Screen
-            name="SignIn"
-            component={SignInScreen}
-            options={{
-              title: "Sign In",
-              animationTypeForReplace: state.isSignout ? "pop" : "push",
-              headerShown: false,
-            }}
-          />
+          <>
+            <Stack.Screen
+              name="SignIn"
+              component={SignInScreen}
+              options={{
+                title: "Sign In",
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUpScreen}
+              options={{
+                title: "Sign Up",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ForgotPassword"
+              component={ForgotPasswordScreen}
+              options={{
+                title: "Forgot Password",
+                headerShown: false,
+              }}
+            />
+          </>
         ) : (
           <Stack.Screen name="Home" component={HomeScreen} />
         )}
