@@ -3,13 +3,15 @@ import * as SecureStore from "expo-secure-store";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-
 import HomeScreen from "./src/screens/HomeScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import SplashScreen from "./src/screens/SplashScreen";
-import SignUpScreen from "./src/screens/SignUpScreen"; 
+import SignUpScreen from "./src/screens/SignUpScreen";
 import { authReducer, initialState } from "./src/state/authReducer";
 import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
+import { LanguageProvider } from "./src/i18n/LanguageContext";
+import { SafeAreaView, StatusBar } from "react-native";
+import globalStyles from "./src/styles/GlobalStyles";
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -62,49 +64,54 @@ export default function App() {
   );
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {state.isLoading ? (
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{ headerShown: false }}
-          />
-        ) : state.userToken == null ? (
-          <>
-            <Stack.Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{
-                title: "Sign In",
-                animationTypeForReplace: state.isSignout ? "pop" : "push",
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUpScreen}
-              options={{
-                title: "Sign Up",
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            />
-            <Stack.Screen
-              name="ForgotPassword"
-              component={ForgotPasswordScreen}
-              options={{
-                title: "Forgot Password",
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            />
-          </>
-        ) : (
-          <Stack.Screen name="Home" component={HomeScreen} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <LanguageProvider>
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      <SafeAreaView style={globalStyles.safeArea}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {state.isLoading ? (
+              <Stack.Screen
+                name="Splash"
+                component={SplashScreen}
+                options={{ headerShown: false }}
+              />
+            ) : state.userToken == null ? (
+              <>
+                <Stack.Screen
+                  name="SignIn"
+                  component={SignInScreen}
+                  options={{
+                    title: "Sign In",
+                    animationTypeForReplace: state.isSignout ? "pop" : "push",
+                    headerShown: false,
+                    gestureEnabled: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="SignUp"
+                  component={SignUpScreen}
+                  options={{
+                    title: "Sign Up",
+                    headerShown: false,
+                    gestureEnabled: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="ForgotPassword"
+                  component={ForgotPasswordScreen}
+                  options={{
+                    title: "Forgot Password",
+                    headerShown: false,
+                    gestureEnabled: false,
+                  }}
+                />
+              </>
+            ) : (
+              <Stack.Screen name="Home" component={HomeScreen} />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </LanguageProvider>
   );
 }

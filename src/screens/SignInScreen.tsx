@@ -7,11 +7,14 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import globalStyles from "../styles/GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import globalStyles from "../styles/GlobalStyles";
+import { useLanguage } from '../i18n/LanguageContext';
+import { LanguageSelector } from '../i18n/LanguageSelector';
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -27,6 +30,7 @@ export default function SignInScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigation = useNavigation<NavigationProp>();
+  const { t } = useLanguage();
 
   const handleLogin = () => {
     if (!email.trim() || !password.trim()) return;
@@ -37,6 +41,8 @@ export default function SignInScreen() {
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
+      <LanguageSelector />
+      
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/logo.png")}
@@ -45,10 +51,10 @@ export default function SignInScreen() {
         />
       </View>
 
-      <Text style={styles.title}>Log in</Text>
+      <Text style={styles.title}>{t.signIn.title}</Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>{t.signIn.email}</Text>
         <TextInput
           style={globalStyles.input}
           placeholder="user@gmail.com"
@@ -61,22 +67,23 @@ export default function SignInScreen() {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Password</Text>
+        <Text style={styles.label}>{t.signIn.password}</Text>
         <View style={styles.passwordContainer}>
           <TextInput
             style={[globalStyles.input, styles.passwordInput]}
-            placeholder="Your password"
+            placeholder={t.signIn.passwordPlaceholder}
             placeholderTextColor="#666"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
+            autoCapitalize="none"
           />
           <Pressable
-            onPress={() => setShowPassword(!showPassword)}
             style={styles.eyeIcon}
+            onPress={() => setShowPassword(!showPassword)}
           >
             <Ionicons
-              name={showPassword ? "eye-outline" : "eye-off-outline"}
+              name={showPassword ? "eye-off" : "eye"}
               size={24}
               color="#666"
             />
@@ -86,7 +93,7 @@ export default function SignInScreen() {
 
       <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
         <Text style={[globalStyles.text, styles.forgotPassword]}>
-          Forgot Password?
+          {t.signIn.forgotPassword}
         </Text>
       </TouchableOpacity>
 
@@ -98,13 +105,13 @@ export default function SignInScreen() {
         ]}
         onPress={handleLogin}
       >
-        <Text style={styles.loginButtonText}>Login</Text>
+        <Text style={styles.loginButtonText}>{t.signIn.login}</Text>
       </TouchableOpacity>
 
       <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Don't have an account?</Text>
+        <Text style={styles.registerText}>{t.signIn.noAccount}</Text>
         <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Text style={styles.registerButton}>Register</Text>
+          <Text style={styles.registerButton}>{t.signIn.register}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -117,7 +124,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 10,
+    marginTop: 30,
+    marginBottom: 8,
   },
   logo: {
     width: 130,

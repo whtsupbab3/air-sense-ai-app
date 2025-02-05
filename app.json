@@ -4,11 +4,11 @@
     "slug": "air-quality-monitoring-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./src/assets/logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./src/assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
@@ -26,7 +26,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/logo.png"
+      "favicon": "./src/assets/logo.png"
     }
   }
 }

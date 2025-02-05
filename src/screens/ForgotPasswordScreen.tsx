@@ -10,6 +10,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
+import { useLanguage } from '../i18n/LanguageContext';
+import { LanguageSelector } from '../i18n/LanguageSelector';
 
 type RootStackParamList = {
   SignUp: undefined;
@@ -26,33 +28,35 @@ export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const navigation = useNavigation<ForgotPasswordScreenNavigationProp>();
+  const { t } = useLanguage();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     setEmail(email);
     if (!email.trim()) {
-      setEmailError("Email is required.");
+      setEmailError(t.errors.emailRequired);
     } else if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address.");
+      setEmailError(t.errors.emailInvalid);
     } else {
       setEmailError("");
     }
   };
 
   const handleResetPassword = () => {
-    // Validate email before proceeding
     validateEmail(email);
     
     if (!email.trim() || emailError) {
       return;
     }
     
-    alert("Password reset instructions have been sent to your email");
+    alert(t.errors.resetEmailSent);
     navigation.navigate("SignIn");
   };
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
+      <LanguageSelector />
+      
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/logo.png")}
@@ -61,11 +65,10 @@ export default function ForgotPasswordScreen() {
         />
       </View>
 
-      <Text style={[globalStyles.text, styles.title]}>Reset Password</Text>
+      <Text style={[globalStyles.text, styles.title]}>{t.forgotPassword.title}</Text>
 
       <Text style={styles.description}>
-        Enter your email address and we'll send you instructions to reset your
-        password.
+        {t.forgotPassword.description}
       </Text>
 
       <View style={styles.inputContainer}>
@@ -87,12 +90,12 @@ export default function ForgotPasswordScreen() {
         onPress={handleResetPassword}
         disabled={!!emailError || !email.trim()}
       >
-        <Text style={styles.resetButtonText}>Send Reset Instructions</Text>
+        <Text style={styles.resetButtonText}>{t.forgotPassword.send}</Text>
       </TouchableOpacity>
 
       <View style={styles.backContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Text style={styles.backButton}>Back to Login</Text>
+          <Text style={styles.backButton}>{t.forgotPassword.backToLogin}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -105,7 +108,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 30,
+    marginTop: 30,
+    marginBottom: 8,
   },
   logo: {
     width: 130,

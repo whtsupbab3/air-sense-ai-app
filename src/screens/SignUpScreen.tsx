@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
+import { useLanguage } from '../i18n/LanguageContext';
+import { LanguageSelector } from '../i18n/LanguageSelector';
 
 type RootStackParamList = {
   SignUp: undefined;
@@ -25,11 +27,32 @@ export default function SignUpScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { t } = useLanguage();
+
+  const handleSignUp = async () => {
+    if (!password.trim() || !email.trim() || !confirmPassword.trim()) return;
+    
+    setIsLoading(true);
+    // Simulate loading progress
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      setLoadingProgress(progress);
+      if (progress >= 100) {
+        clearInterval(interval);
+        setIsLoading(false);
+        // Here you would typically handle the actual sign up
+      }
+    }, 200);
+  };
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
+      <LanguageSelector />
+      
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/logo.png")}
@@ -38,10 +61,10 @@ export default function SignUpScreen() {
         />
       </View>
 
-      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.title}>{t.signUp.title}</Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>{t.signUp.email}</Text>
         <TextInput
           style={globalStyles.input}
           placeholder="user@gmail.com"
@@ -54,22 +77,23 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Password</Text>
+        <Text style={styles.label}>{t.signUp.password}</Text>
         <View style={styles.passwordContainer}>
           <TextInput
             style={[globalStyles.input, styles.passwordInput]}
-            placeholder="Your password"
+            placeholder={t.signUp.passwordPlaceholder}
             placeholderTextColor="#666"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
+            autoCapitalize="none"
           />
           <Pressable
-            onPress={() => setShowPassword(!showPassword)}
             style={styles.eyeIcon}
+            onPress={() => setShowPassword(!showPassword)}
           >
             <Ionicons
-              name={showPassword ? "eye-outline" : "eye-off-outline"}
+              name={showPassword ? "eye-off" : "eye"}
               size={24}
               color="#666"
             />
@@ -78,22 +102,23 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Confirm Password</Text>
+        <Text style={styles.label}>{t.signUp.confirmPassword}</Text>
         <View style={styles.passwordContainer}>
           <TextInput
             style={[globalStyles.input, styles.passwordInput]}
-            placeholder="Confirm your password"
+            placeholder={t.signUp.confirmPasswordPlaceholder}
             placeholderTextColor="#666"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={!showConfirmPassword}
+            autoCapitalize="none"
           />
           <Pressable
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
             style={styles.eyeIcon}
+            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
           >
             <Ionicons
-              name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
+              name={showConfirmPassword ? "eye-off" : "eye"}
               size={24}
               color="#666"
             />
@@ -102,19 +127,26 @@ export default function SignUpScreen() {
       </View>
 
       <TouchableOpacity
-        disabled={!password.trim() || !email.trim() || !confirmPassword.trim()}
+        disabled={!password.trim() || !email.trim() || !confirmPassword.trim() || isLoading}
         style={[
           styles.signUpButton,
-          (!password.trim() || !email.trim() || !confirmPassword.trim()) && globalStyles.buttonDisabled,
+          (!password.trim() || !email.trim() || !confirmPassword.trim() || isLoading) && globalStyles.buttonDisabled,
         ]}
+        onPress={handleSignUp}
       >
-        <Text style={styles.signUpButtonText}>Create Account</Text>
+        <Text style={styles.signUpButtonText}>{t.signUp.createAccount}</Text>
       </TouchableOpacity>
 
+      {isLoading && (
+        <View style={styles.statusPanel}>
+          <Text style={styles.statusText}>Downloading {loadingProgress.toFixed(2)}%</Text>
+        </View>
+      )}
+
       <View style={styles.loginContainer}>
-        <Text style={styles.loginText}>Already have an account?</Text>
+        <Text style={styles.loginText}>{t.signUp.haveAccount}</Text>
         <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Text style={styles.loginButton}>Log in</Text>
+          <Text style={styles.loginButton}>{t.signUp.login}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -127,7 +159,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 10,
+    marginTop: 30,
+    marginBottom: 8,
   },
   logo: {
     width: 130,
@@ -187,5 +220,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 8,
+  },
+  statusPanel: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  statusText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

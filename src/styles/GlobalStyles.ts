@@ -1,6 +1,10 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform, StatusBar } from "react-native";
 
 const globalStyles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000000',
+  },
   container: {
     flex: 1,
   },
@@ -10,7 +14,8 @@ const globalStyles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#000000",
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     color: "white",
   },
   buttonDisabled: {
