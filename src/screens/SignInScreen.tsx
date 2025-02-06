@@ -15,6 +15,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
 import { useLanguage } from '../i18n/LanguageContext';
 import { LanguageSelector } from '../i18n/LanguageSelector';
+import { useDispatch } from "react-redux";
+import { setToken } from '../store/slices/authSlice';
 
 // TEMPORARY
 const API_URL = "http://127.0.0.1:3000";
@@ -36,6 +38,7 @@ export default function SignInScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation<NavigationProp>();
   const { t } = useLanguage();
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     setErrorMessage("");
@@ -63,11 +66,8 @@ export default function SignInScreen() {
         throw new Error(data.message || t.signIn.loginFailed);
       }
 
-      // TODO: Store the token in secure storage
-      // For now, just navigate to the main screen
-      navigation.navigate("Home");
+      dispatch(setToken(data.token));
       console.log("Login successful", data);
-      
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage(error instanceof Error ? error.message : t.signIn.loginFailed);

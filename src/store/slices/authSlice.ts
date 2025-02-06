@@ -6,7 +6,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  isLoading: true, 
+  isLoading: false,
   userToken: null,
 };
 

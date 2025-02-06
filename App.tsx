@@ -1,11 +1,11 @@
 import React from "react";
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { store, persistor } from './src/store';
-import { useSelector } from 'react-redux';
-import { RootState } from './src/store';
+import { store, persistor } from "./src/store";
+import { useSelector } from "react-redux";
+import { RootState } from "./src/store";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import SignInScreen from "./src/screens/SignInScreen";
@@ -27,20 +27,22 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function AppContent() {
-  const { isLoading, userToken } = useSelector((state: RootState) => state.auth);
+  const { isLoading, userToken } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {isLoading ? (
-          <Stack.Screen 
-            name="Splash" 
+          <Stack.Screen
+            name="Splash"
             component={SplashScreen}
             options={{
               headerShown: false,
             }}
           />
-        ) : (
+        ) : !userToken ? (
           <>
             <Stack.Screen
               name="SignIn"
@@ -66,15 +68,16 @@ function AppContent() {
                 gestureEnabled: false,
               }}
             />
-            <Stack.Screen 
-              name="Home" 
-              component={HomeScreen}
-              options={{
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            />
           </>
+        ) : (
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+              gestureEnabled: false,
+            }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>

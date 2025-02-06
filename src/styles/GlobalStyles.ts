@@ -3,7 +3,7 @@ import { StyleSheet, Platform, StatusBar } from "react-native";
 const globalStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: "#000000",
   },
   container: {
     flex: 1,
@@ -15,8 +15,16 @@ const globalStyles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#000000",
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     color: "white",
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
   },
   buttonDisabled: {
     opacity: 0.5,
