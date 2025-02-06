@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { signOut } from '../store/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from '../store/slices/userSlice';
 import globalStyles from '../styles/GlobalStyles';
+import { RootState } from 'store';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
 
   const handleSignOut = () => {
     dispatch(signOut());
@@ -13,7 +15,7 @@ export default function HomeScreen() {
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
-      <Text style={[globalStyles.text, styles.title]}>Air Quality Monitor</Text>
+      <Text style={[globalStyles.text, styles.title]}>Hi {user?.name}</Text>
       
       <TouchableOpacity
         style={[globalStyles.button, styles.signOutButton]}

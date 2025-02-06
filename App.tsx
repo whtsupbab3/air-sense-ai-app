@@ -27,22 +27,12 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function AppContent() {
-  const { isLoading, userToken } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { user } = useSelector((state: RootState) => state.user);
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {isLoading ? (
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        ) : !userToken ? (
+        {!user ? (
           <>
             <Stack.Screen
               name="SignIn"

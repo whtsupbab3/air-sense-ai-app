@@ -1,4 +1,59 @@
-export const translations = {
+interface SignUpTranslations {
+  title: string;
+  name: string;
+  email: string;
+  password: string;
+  createAccount: string;
+  creatingAccount: string;
+  haveAccount: string;
+  login: string;
+  passwordPlaceholder: string;
+  fillAllFields: string;
+  registrationFailed: string;
+}
+
+interface SignInTranslations {
+  title: string;
+  email: string;
+  password: string;
+  forgotPassword: string;
+  login: string;
+  loggingIn: string;
+  noAccount: string;
+  register: string;
+  passwordPlaceholder: string;
+  fillAllFields: string;
+  loginFailed: string;
+  creatingAccount: string;
+}
+
+interface ForgotPasswordTranslations {
+  title: string;
+  description: string;
+  email: string;
+  send: string;
+  backToLogin: string;
+}
+
+interface ErrorTranslations {
+  resetEmailSent: string;
+  emailRequired: string;
+  emailInvalid: string;
+}
+
+interface LoadingTranslations {
+  text: string;
+}
+
+interface Translations {
+  signUp: SignUpTranslations;
+  signIn: SignInTranslations;
+  forgotPassword: ForgotPasswordTranslations;
+  loading: LoadingTranslations;
+  errors: ErrorTranslations;
+}
+
+export const translations: Record<'en' | 'ua', Translations> = {
   en: {
     signIn: {
       title: "Log in",
@@ -12,6 +67,7 @@ export const translations = {
       passwordPlaceholder: "Your password",
       fillAllFields: "Please fill in all fields",
       loginFailed: "Login failed. Please check your credentials and try again.",
+      creatingAccount: "Creating Account..."
     },
     signUp: {
       title: "Create Account",
@@ -24,6 +80,7 @@ export const translations = {
       passwordPlaceholder: "Your password",
       fillAllFields: "Please fill in all fields",
       registrationFailed: "Registration failed. Please try again.",
+      creatingAccount: "Creating Account..."
     },
     forgotPassword: {
       title: "Reset Password",
@@ -55,6 +112,7 @@ export const translations = {
       passwordPlaceholder: "Ваш пароль",
       fillAllFields: "Будь ласка, заповніть всі поля",
       loginFailed: "Помилка входу. Перевірте ваші дані та спробуйте ще раз.",
+      creatingAccount: "Створення облікового запису..."
     },
     signUp: {
       title: "Створити обліковий запис",
@@ -67,6 +125,7 @@ export const translations = {
       passwordPlaceholder: "Ваш пароль",
       fillAllFields: "Будь ласка, заповніть всі поля",
       registrationFailed: "Реєстрація не вдалася. Будь ласка, спробуйте ще раз.",
+      creatingAccount: "Створення облікового запису..."
     },
     forgotPassword: {
       title: "Скинути пароль",

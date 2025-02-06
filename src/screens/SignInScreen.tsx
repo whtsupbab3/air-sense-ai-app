@@ -16,7 +16,7 @@ import globalStyles from "../styles/GlobalStyles";
 import { useLanguage } from '../i18n/LanguageContext';
 import { LanguageSelector } from '../i18n/LanguageSelector';
 import { useDispatch } from "react-redux";
-import { setToken } from '../store/slices/authSlice';
+import { setUser } from '../store/slices/userSlice';
 
 // TEMPORARY
 const API_URL = "http://127.0.0.1:3000";
@@ -41,6 +41,7 @@ export default function SignInScreen() {
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
+    console.log('Logging in')
     setErrorMessage("");
     if (!email.trim() || !password.trim()) {
       setErrorMessage(t.signIn.fillAllFields);
@@ -66,8 +67,9 @@ export default function SignInScreen() {
         throw new Error(data.message || t.signIn.loginFailed);
       }
 
-      dispatch(setToken(data.token));
-      console.log("Login successful", data);
+      console.log(data.user);
+      dispatch(setUser(data.user));
+      console.log("Login successful.", data);
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage(error instanceof Error ? error.message : t.signIn.loginFailed);

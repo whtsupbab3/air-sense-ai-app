@@ -150,9 +150,9 @@ export default function SignUpScreen() {
         ]}
         onPress={handleSignUp}
       >
-        <Text style={styles.signUpButtonText}>{t.signUp.createAccount}</Text>
+        <Text style={styles.signUpButtonText}>{isLoading ? t.signUp.creatingAccount : t.signUp.createAccount}</Text>
       </TouchableOpacity>
-      
+
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>{t.signUp.haveAccount}</Text>
         <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
