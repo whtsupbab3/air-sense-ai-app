@@ -12,8 +12,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
-import { useLanguage } from '../i18n/LanguageContext';
-import { LanguageSelector } from '../i18n/LanguageSelector';
+import { useLanguage } from "../i18n/LanguageContext";
+import { LanguageSelector } from "../i18n/LanguageSelector";
+
+// TEMPRORARY
+const API_URL = "http://127.0.0.1:3000";
 
 type RootStackParamList = {
   SignUp: undefined;
@@ -24,35 +27,54 @@ type RootStackParamList = {
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { t } = useLanguage();
 
   const handleSignUp = async () => {
-    if (!password.trim() || !email.trim() || !confirmPassword.trim()) return;
-    
+    setErrorMessage(""); 
+    if (!password.trim() || !email.trim() || !name.trim()) {
+      setErrorMessage(t.signUp.fillAllFields);
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate loading progress
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 10;
-      setLoadingProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        setIsLoading(false);
-        // Here you would typically handle the actual sign up
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          password: password.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || t.signUp.registrationFailed);
       }
-    }, 200);
+
+      navigation.navigate("SignIn");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setErrorMessage(error instanceof Error ? error.message : t.signUp.registrationFailed);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
       <LanguageSelector />
-      
+
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/logo.png")}
@@ -62,6 +84,18 @@ export default function SignUpScreen() {
       </View>
 
       <Text style={styles.title}>{t.signUp.title}</Text>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>{t.signUp.name}</Text>
+        <TextInput
+          style={globalStyles.input}
+          placeholder="John Doe"
+          placeholderTextColor="#666"
+          value={name}
+          onChangeText={setName}
+          autoCapitalize="none"
+        />
+      </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>{t.signUp.email}</Text>
@@ -101,48 +135,24 @@ export default function SignUpScreen() {
         </View>
       </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>{t.signUp.confirmPassword}</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={[globalStyles.input, styles.passwordInput]}
-            placeholder={t.signUp.confirmPasswordPlaceholder}
-            placeholderTextColor="#666"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={!showConfirmPassword}
-            autoCapitalize="none"
-          />
-          <Pressable
-            style={styles.eyeIcon}
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-          >
-            <Ionicons
-              name={showConfirmPassword ? "eye-off" : "eye"}
-              size={24}
-              color="#666"
-            />
-          </Pressable>
-        </View>
-      </View>
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
 
       <TouchableOpacity
-        disabled={!password.trim() || !email.trim() || !confirmPassword.trim() || isLoading}
+        disabled={
+          !password.trim() || !email.trim() || !name.trim() || isLoading
+        }
         style={[
           styles.signUpButton,
-          (!password.trim() || !email.trim() || !confirmPassword.trim() || isLoading) && globalStyles.buttonDisabled,
+          (!password.trim() || !email.trim() || !name.trim() || isLoading) &&
+            globalStyles.buttonDisabled,
         ]}
         onPress={handleSignUp}
       >
         <Text style={styles.signUpButtonText}>{t.signUp.createAccount}</Text>
       </TouchableOpacity>
-
-      {isLoading && (
-        <View style={styles.statusPanel}>
-          <Text style={styles.statusText}>Downloading {loadingProgress.toFixed(2)}%</Text>
-        </View>
-      )}
-
+      
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>{t.signUp.haveAccount}</Text>
         <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
@@ -177,7 +187,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    color: "#FFFFFF",
+    color: "#FFF",
     marginBottom: 8,
     fontSize: 16,
   },
@@ -232,5 +242,11 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "600",
+  },
+  errorText: {
+    color: '#ff0000',
+    marginTop: 5,
+    textAlign: 'center',
+    marginBottom: 0,
   },
 });

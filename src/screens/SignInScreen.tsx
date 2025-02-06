@@ -16,10 +16,14 @@ import globalStyles from "../styles/GlobalStyles";
 import { useLanguage } from '../i18n/LanguageContext';
 import { LanguageSelector } from '../i18n/LanguageSelector';
 
+// TEMPORARY
+const API_URL = "http://127.0.0.1:3000";
+
 type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForgotPassword: undefined;
+  Home: undefined;
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -28,15 +32,48 @@ export default function SignInScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation<NavigationProp>();
   const { t } = useLanguage();
 
-  const handleLogin = () => {
-    if (!email.trim() || !password.trim()) return;
+  const handleLogin = async () => {
+    setErrorMessage("");
+    if (!email.trim() || !password.trim()) {
+      setErrorMessage(t.signIn.fillAllFields);
+      return;
+    }
 
-    alert("Password reset instructions have been sent to your email");
-    navigation.navigate("SignIn");
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || t.signIn.loginFailed);
+      }
+
+      // TODO: Store the token in secure storage
+      // For now, just navigate to the main screen
+      navigation.navigate("Home");
+      console.log("Login successful", data);
+      
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMessage(error instanceof Error ? error.message : t.signIn.loginFailed);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,21 +128,24 @@ export default function SignInScreen() {
         </View>
       </View>
 
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
+
+      <TouchableOpacity
+        style={[globalStyles.button, styles.signInButton]}
+        onPress={handleLogin}
+        disabled={isLoading}
+      >
+        <Text style={styles.signInButtonText}>
+          {isLoading ? t.signIn.loggingIn : t.signIn.login}
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
         <Text style={[globalStyles.text, styles.forgotPassword]}>
           {t.signIn.forgotPassword}
         </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        disabled={!password.trim() || !email.trim()}
-        style={[
-          styles.loginButton,
-          (!password.trim() || !email.trim()) && globalStyles.buttonDisabled,
-        ]}
-        onPress={handleLogin}
-      >
-        <Text style={styles.loginButtonText}>{t.signIn.login}</Text>
       </TouchableOpacity>
 
       <View style={styles.registerContainer}>
@@ -163,16 +203,22 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 24,
   },
-  loginButton: {
+  signInButton: {
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
     padding: 16,
     alignItems: "center",
   },
-  loginButtonText: {
+  signInButtonText: {
     color: "#000",
     fontSize: 16,
     fontWeight: "600",
+  },
+  errorText: {
+    color: '#ff0000',
+    marginTop: 0,
+    textAlign: 'center',
+    marginBottom: 15,
   },
   registerContainer: {
     flexDirection: "row",
