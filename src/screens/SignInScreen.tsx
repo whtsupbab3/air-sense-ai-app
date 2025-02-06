@@ -44,7 +44,6 @@ export default function SignInScreen() {
     console.log('Logging in')
     setErrorMessage("");
     if (!email.trim() || !password.trim()) {
-      setErrorMessage(t.signIn.fillAllFields);
       return;
     }
 
@@ -135,9 +134,9 @@ export default function SignInScreen() {
       ) : null}
 
       <TouchableOpacity
-        style={[globalStyles.button, styles.signInButton]}
+        style={[globalStyles.button, styles.signInButton, (!email.trim() || !password.trim()) && globalStyles.buttonDisabled]}
         onPress={handleLogin}
-        disabled={isLoading}
+        disabled={(!email.trim() || !password.trim()) || isLoading}
       >
         <Text style={styles.signInButtonText}>
           {isLoading ? t.signIn.loggingIn : t.signIn.login}
