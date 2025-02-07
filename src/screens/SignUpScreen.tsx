@@ -36,7 +36,7 @@ export default function SignUpScreen() {
   const { t } = useLanguage();
 
   const handleSignUp = async () => {
-    setErrorMessage(""); 
+    setErrorMessage("");
     if (!password.trim() || !email.trim() || !name.trim()) {
       setErrorMessage(t.signUp.fillAllFields);
       return;
@@ -65,7 +65,9 @@ export default function SignUpScreen() {
       navigation.navigate("SignIn");
     } catch (error) {
       console.error("Registration error:", error);
-      setErrorMessage(error instanceof Error ? error.message : t.signUp.registrationFailed);
+      setErrorMessage(
+        error instanceof Error ? error.message : t.signUp.registrationFailed
+      );
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +75,9 @@ export default function SignUpScreen() {
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
-      <LanguageSelector />
+      <View style={styles.languageSelectorContainer}>
+        <LanguageSelector />
+      </View>
 
       <View style={styles.logoContainer}>
         <Image
@@ -150,7 +154,9 @@ export default function SignUpScreen() {
         ]}
         onPress={handleSignUp}
       >
-        <Text style={styles.signUpButtonText}>{isLoading ? t.signUp.creatingAccount : t.signUp.createAccount}</Text>
+        <Text style={styles.signUpButtonText}>
+          {isLoading ? t.signUp.creatingAccount : t.signUp.createAccount}
+        </Text>
       </TouchableOpacity>
 
       <View style={styles.loginContainer}>
@@ -164,6 +170,11 @@ export default function SignUpScreen() {
 }
 
 const styles = StyleSheet.create({
+  languageSelectorContainer: {
+    position: "absolute",
+    top: 10,
+    right: 20,
+  },
   container: {
     padding: 20,
   },
@@ -244,9 +255,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   errorText: {
-    color: '#ff0000',
+    color: "#ff0000",
     marginTop: 5,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 0,
   },
 });

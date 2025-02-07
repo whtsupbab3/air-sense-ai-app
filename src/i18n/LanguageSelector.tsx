@@ -30,9 +30,6 @@ export const LanguageSelector = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    position: "absolute",
-    top: 10,
-    right: 20,
     backgroundColor: "#1A1A1A",
     borderRadius: 20,
     padding: 4,

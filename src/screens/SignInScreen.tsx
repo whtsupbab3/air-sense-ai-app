@@ -79,8 +79,10 @@ export default function SignInScreen() {
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
-      <LanguageSelector />
-      
+      <View style={styles.languageSelectorContainer}>
+        <LanguageSelector />
+      </View>
+
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/logo.png")}
@@ -160,6 +162,11 @@ export default function SignInScreen() {
 }
 
 const styles = StyleSheet.create({
+  languageSelectorContainer: {
+    position: "absolute",
+    top: 10,
+    right: 20,
+  },
   container: {
     padding: 20,
   },

@@ -10,8 +10,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
-import { useLanguage } from '../i18n/LanguageContext';
-import { LanguageSelector } from '../i18n/LanguageSelector';
+import { useLanguage } from "../i18n/LanguageContext";
+import { LanguageSelector } from "../i18n/LanguageSelector";
 
 type RootStackParamList = {
   SignUp: undefined;
@@ -44,19 +44,21 @@ export default function ForgotPasswordScreen() {
 
   const handleResetPassword = () => {
     validateEmail(email);
-    
+
     if (!email.trim() || emailError) {
       return;
     }
-    
+
     alert(t.errors.resetEmailSent);
     navigation.navigate("SignIn");
   };
 
   return (
     <View style={[globalStyles.screen, styles.container]}>
-      <LanguageSelector />
-      
+      <View style={styles.languageSelectorContainer}>
+        <LanguageSelector />
+      </View>
+
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/logo.png")}
@@ -65,11 +67,11 @@ export default function ForgotPasswordScreen() {
         />
       </View>
 
-      <Text style={[globalStyles.text, styles.title]}>{t.forgotPassword.title}</Text>
-
-      <Text style={styles.description}>
-        {t.forgotPassword.description}
+      <Text style={[globalStyles.text, styles.title]}>
+        {t.forgotPassword.title}
       </Text>
+
+      <Text style={styles.description}>{t.forgotPassword.description}</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -86,7 +88,10 @@ export default function ForgotPasswordScreen() {
       </View>
 
       <TouchableOpacity
-        style={[styles.resetButton, (emailError || !email.trim()) && globalStyles.buttonDisabled]}
+        style={[
+          styles.resetButton,
+          (emailError || !email.trim()) && globalStyles.buttonDisabled,
+        ]}
         onPress={handleResetPassword}
         disabled={!!emailError || !email.trim()}
       >
@@ -103,6 +108,11 @@ export default function ForgotPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
+  languageSelectorContainer: {
+    position: "absolute",
+    top: 10,
+    right: 20,
+  },
   container: {
     padding: 20,
   },
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   errorText: {
-    color: '#FF0000',
+    color: "#FF0000",
     fontSize: 12,
     marginTop: 4,
   },
