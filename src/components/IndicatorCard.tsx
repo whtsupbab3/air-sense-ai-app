@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Status } from "../utils/types";
 import { getStatusColor } from "../utils/utils";
-import Svg, { Circle, CircleProps } from "react-native-svg";
+import Svg, { Circle } from "react-native-svg";
 
 interface IndicatorCardProps {
   name: string;
@@ -14,12 +14,12 @@ interface IndicatorCardProps {
   };
 }
 
-const CircularProgress = ({ 
+function CircularProgress ({ 
   size = 48,
   strokeWidth = 4,
   progress = 0.7,
   color = "#FFC107"
-}) => {
+}) {
   const center = size / 2;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;

@@ -6,15 +6,17 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { store, persistor } from "./src/store";
 import { useSelector } from "react-redux";
 import { RootState } from "./src/store";
-
 import HomeScreen from "./src/screens/HomeScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import SplashScreen from "./src/screens/SplashScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
-import { LanguageProvider } from "./src/i18n/LanguageContext";
 import { SafeAreaView, StatusBar } from "react-native";
 import globalStyles from "./src/styles/GlobalStyles";
+import { LanguageProvider } from "i18n/LanguageContext";
+import SettingsScreen from "screens/SettingsScreen";
+import StatisticsScreen from "screens/StatisticsScreen";
+import ControlScreen from "screens/ControlScreen";
 
 type RootStackParamList = {
   SignIn: undefined;
@@ -22,6 +24,9 @@ type RootStackParamList = {
   ForgotPassword: undefined;
   Home: undefined;
   Splash: undefined;
+  Settings: undefined;
+  Control: undefined;
+  Statistics: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -60,14 +65,40 @@ function AppContent() {
             />
           </>
         ) : (
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-              gestureEnabled: false,
-            }}
-          />
+          <>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="Control"
+              component={ControlScreen}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="Statistics"
+              component={StatisticsScreen}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

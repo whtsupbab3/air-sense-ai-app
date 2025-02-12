@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
 import { useLanguage } from "../i18n/LanguageContext";
-import { LanguageSelector } from "../i18n/LanguageSelector";
+import { LanguageSelector } from "../components/LanguageSelector";
 
 type RootStackParamList = {
   SignUp: undefined;

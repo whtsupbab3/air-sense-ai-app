@@ -15,11 +15,11 @@ const globalStyles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#000000",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 3,
     color: "white",
+    paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: "#007AFF",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",

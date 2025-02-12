@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import globalStyles from "../styles/GlobalStyles";
 import { useLanguage } from '../i18n/LanguageContext';
-import { LanguageSelector } from '../i18n/LanguageSelector';
+import { LanguageSelector } from '../components/LanguageSelector';
 import { useDispatch } from "react-redux";
 import { setUser } from '../store/slices/userSlice';
 
@@ -41,7 +41,6 @@ export default function SignInScreen() {
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    console.log('Logging in')
     setErrorMessage("");
     if (!email.trim() || !password.trim()) {
       return;
@@ -66,9 +65,7 @@ export default function SignInScreen() {
         throw new Error(data.message || t.signIn.loginFailed);
       }
 
-      console.log(data.user);
       dispatch(setUser(data.user));
-      console.log("Login successful.", data);
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage(error instanceof Error ? error.message : t.signIn.loginFailed);

@@ -13,9 +13,10 @@ import { RootState } from "../store";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { getStatusColor } from "utils/utils";
-import { LanguageSelector } from "../i18n/LanguageSelector";
+import { LanguageSelector } from "../components/LanguageSelector";
 import IndicatorList from "components/IndicatorList";
 import { useLanguage } from "i18n/LanguageContext";
+import Header from "components/Header";
 
 export interface IndicatorData {
   value: number;
@@ -41,7 +42,7 @@ interface AirQualityData {
 }
 
 export default function HomeScreen() {
-  const dispatch = useDispatch();
+
   const { user } = useSelector((state: RootState) => state.user);
   const { t } = useLanguage();
 
@@ -86,25 +87,12 @@ export default function HomeScreen() {
     },
   });
 
-  const handleSignOut = () => {
-    dispatch(signOut());
-  };
+
 
   return (
     <ScrollView style={globalStyles.screen}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.greeting}>{`${t.home.greeting}, ${user?.name || t.common.user}!`}</Text>
-          <View style={styles.headerRight}>
-            <LanguageSelector />
-            <TouchableOpacity
-              onPress={handleSignOut}
-              style={styles.settingsButton}
-            >
-              <Ionicons name="settings-outline" size={24} color="#fff" />
-            </TouchableOpacity>
-          </View>
-        </View>
+      <View style={globalStyles.screen}>
+        <Header currentScreen="Home" />
 
         <View style={styles.mainCard}>
           <Text style={styles.title}>{t.home.currentAirQuality}</Text>
@@ -124,7 +112,10 @@ export default function HomeScreen() {
           </View>
 
           <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, eos voluptatum? Ducimus amet, quos nostrum cupiditate impedit minus praesentium expedita ad quisquam quis, magnam distinctio, nobis beatae blanditiis dignissimos rerum?
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit,
+            eos voluptatum? Ducimus amet, quos nostrum cupiditate impedit minus
+            praesentium expedita ad quisquam quis, magnam distinctio, nobis
+            beatae blanditiis dignissimos rerum?
           </Text>
         </View>
         <IndicatorList
@@ -148,26 +139,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   greeting: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
   },
-  settingsButton: {
+  icon: {
     padding: 8,
   },
   mainCard: {

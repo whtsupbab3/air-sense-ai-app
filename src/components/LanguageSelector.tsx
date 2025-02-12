@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
-import { useLanguage } from "./LanguageContext";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export const LanguageSelector = () => {
   const { language, setLanguage } = useLanguage();
